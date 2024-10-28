@@ -13,7 +13,7 @@ import (
 func main() {
 	db, err := database.ConnectDB()
 	if err != nil {
-		log.Fatalln("error connecting to db")
+		log.Fatalln(err)
 		return
 	}
 	defer func() {
@@ -53,8 +53,10 @@ func main() {
 
 	// router.POST("/register", handlers.Register)
 	// router.POST("/login", handlers.Login)
-	router.GET("/cars", handlers.GetCars)
-	// router.GET("/rents/:id", )
+
+	// authorhizedGroup := router.Group("", middleware.JWTRequired())
+	// router.GET("/cars", handlers.GetCars)
+	// router.GET("/rents/:id", handlers.DeleteRent)
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalln(err)
