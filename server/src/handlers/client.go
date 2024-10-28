@@ -54,3 +54,35 @@ func CreateClient(ctx *gin.Context) {
 
 	ctx.String(http.StatusOK, http.StatusText(http.StatusOK))
 }
+
+func DeleteClient(ctx *gin.Context) {
+	db := database.GetDBFromContext(ctx)
+
+	clientID := ctx.Param("id")
+	if clientID == "" {
+		ctx.String(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+		ctx.Abort()
+		return
+	}
+
+	var client models.Client
+	if err := db.First(&client, clientID).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			ctx.String(http.StatusNotFound, http.StatusText(http.StatusNotFound))
+		} else {
+			log.Println(err)
+			ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+		}
+		ctx.Abort()
+		return
+	}
+
+	if err := db.Delete(&client).Error; err != nil {
+		log.Println(err)
+		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+		ctx.Abort()
+		return
+	}
+
+	ctx.String(http.StatusOK, http.StatusText(http.StatusOK))
+}

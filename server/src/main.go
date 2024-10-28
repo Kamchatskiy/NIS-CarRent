@@ -13,7 +13,7 @@ import (
 func main() {
 	db, err := database.ConnectDB()
 	if err != nil {
-		log.Fatalln("error connecting to db")
+		log.Fatalln(err)
 		return
 	}
 	defer func() {
@@ -42,11 +42,21 @@ func main() {
 		ctx.Next()
 	})
 
-	router.POST("/register", handlers.CreateClient)
-	router.GET("/clients", middleware.AdminKeyRequired(adminKey), handlers.GetClients)
-	router.GET("/cars", handlers.GetCars)
-	// router.POST("/cars/:id", middleware.AdminKeyRequired(adminKey), handlers.)
-	// router.GET("/rents", middleware.AdminKeyRequired(adminKey), handlers.get)
+	adminGroup := router.Group("/admin", middleware.AdminKeyRequired(adminKey))
+	adminGroup.GET("/clients", handlers.GetClients)
+	adminGroup.POST("/clients/new", handlers.CreateClient)
+	adminGroup.DELETE("/clients/:id", handlers.DeleteClient)
+	adminGroup.POST("/cars/new", handlers.CreateCar)
+	adminGroup.DELETE("/cars/:id", handlers.DeleteCar)
+	adminGroup.GET("/rents", handlers.GetRents)
+	adminGroup.DELETE("/rents/:id", handlers.DeleteClient)
+
+	// router.POST("/register", handlers.Register)
+	// router.POST("/login", handlers.Login)
+
+	// authorhizedGroup := router.Group("", middleware.JWTRequired())
+	// router.GET("/cars", handlers.GetCars)
+	// router.GET("/rents/:id", handlers.DeleteRent)
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalln(err)
