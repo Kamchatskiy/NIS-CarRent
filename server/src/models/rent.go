@@ -8,5 +8,7 @@ type Rent struct {
 	CarID     uint      `json:"car_id"`
 	StartDate time.Time `json:"start_date"`
 	EndDate   time.Time `json:"end_date"`
-	Price     uint      `json:"price"`
+	Price     uint      `json:"price" binding:"required"`
+	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
+	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
