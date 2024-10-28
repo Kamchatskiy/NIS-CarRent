@@ -3,7 +3,6 @@ package database
 import (
 	"log"
 	"os"
-	"strings"
 
 	"github.com/Kamchatskiy/NIS-CarRent/models"
 	"gorm.io/driver/postgres"
@@ -16,9 +15,8 @@ func ConnectDB() (*gorm.DB, error) {
 		log.Println(err)
 		return nil, err
 	}
-	dbPassStr := strings.TrimSpace(string(dbPass))
 
-	dsn := "host=db user=backend password=" + dbPassStr + " dbname=car_rent port=5432 sslmode=disable TimeZone=Europe/Moscow"
+	dsn := "host=db user=backend password=" + string(dbPass) + " dbname=car_rent port=5432 sslmode=disable TimeZone=Europe/Moscow"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Println(err)
