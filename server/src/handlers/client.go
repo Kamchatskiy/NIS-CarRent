@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Register(ctx *gin.Context) {
+func CreateClient(ctx *gin.Context) {
 	db := database.GetDBFromContext(ctx)
 
 	var client models.Client
@@ -49,6 +49,7 @@ func GetClients(ctx *gin.Context) {
 	if err := db.Find(&clients).Error; err != nil {
 		log.Println(err)
 		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+		ctx.Abort()
 		return
 	}
 	ctx.JSON(http.StatusOK, clients)
