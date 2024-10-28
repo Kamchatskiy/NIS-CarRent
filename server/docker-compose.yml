@@ -3,7 +3,7 @@ name: car-rent
 services:
   app:
     container_name: car_rent_app
-    restart: never
+    restart: no
     build:
       context: .
       dockerfile: Dockerfile
