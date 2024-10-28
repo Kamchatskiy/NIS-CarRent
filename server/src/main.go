@@ -44,6 +44,7 @@ func main() {
 
 	router.GET("/clients", middleware.AdminKeyRequired(adminKey), handlers.GetClients)
 	router.POST("/clients/new", handlers.CreateClient)
+	router.DELETE("/clients/:id", middleware.AdminKeyRequired(adminKey), handlers.DeleteClient)
 
 	router.GET("/cars", handlers.GetCars)
 	router.POST("/cars/new", middleware.AdminKeyRequired(adminKey), handlers.CreateCar)
