@@ -3,7 +3,7 @@ name: car-rent
 services:
   app:
     container_name: car_rent_app
-    pull_policy: never
+    restart: never
     build:
       context: .
       dockerfile: Dockerfile
@@ -21,7 +21,6 @@ services:
   db:
     container_name: car_rent_db
     restart: always
-    pull_policy: always
     image: postgres:latest
     environment:
       - POSTGRES_USER=backend
