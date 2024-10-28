@@ -1,0 +1,48 @@
+name: car-rent
+
+services:
+  app:
+    container_name: car_rent_app
+    pull_policy: never
+    build:
+      context: .
+      dockerfile: Dockerfile
+      no_cache: true
+    environment:
+      - GIN_MODE=release
+    secrets:
+      - source: db-pass
+        target: /run/secrets/db-pass
+    networks:
+      - main
+    ports:
+      - 8080:8080/tcp
+
+  db:
+    container_name: car_rent_db
+    restart: always
+    pull_policy: always
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=backend
+      - POSTGRES_DB=car_rent
+      # - POSTGRES_INITDB_ARGS="--encoding='UTF8' --lc-collate='C' --lc-ctype='C'"
+      - POSTGRES_PASSWORD_FILE=/run/secrets/password
+    secrets:
+      - source: db-pass
+        target: /run/secrets/password
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
+    networks:
+      - main
+
+secrets:
+  db-pass:
+    file: ./secrets/db-password
+
+volumes:
+  db-data:
+
+networks:
+  main:
+    driver: bridge
