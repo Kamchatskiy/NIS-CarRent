@@ -42,14 +42,19 @@ func main() {
 		ctx.Next()
 	})
 
-	router.GET("/clients", middleware.AdminKeyRequired(adminKey), handlers.GetClients)
-	router.POST("/clients/new", handlers.CreateClient)
-	router.DELETE("/clients/:id", middleware.AdminKeyRequired(adminKey), handlers.DeleteClient)
+	adminGroup := router.Group("/admin", middleware.AdminKeyRequired(adminKey))
+	adminGroup.GET("/clients", handlers.GetClients)
+	adminGroup.POST("/clients/new", handlers.CreateClient)
+	adminGroup.DELETE("/clients/:id", handlers.DeleteClient)
+	adminGroup.POST("/cars/new", handlers.CreateCar)
+	adminGroup.DELETE("/cars/:id", handlers.DeleteCar)
+	adminGroup.GET("/rents", handlers.GetRents)
+	adminGroup.DELETE("/rents/:id", handlers.DeleteClient)
 
+	// router.POST("/register", handlers.Register)
+	// router.POST("/login", handlers.Login)
 	router.GET("/cars", handlers.GetCars)
-	router.POST("/cars/new", middleware.AdminKeyRequired(adminKey), handlers.CreateCar)
-
-	router.GET("/rents", middleware.AdminKeyRequired(adminKey), handlers.GetRents)
+	// router.GET("/rents/:id", )
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalln(err)
