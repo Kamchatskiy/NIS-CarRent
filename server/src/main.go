@@ -42,11 +42,13 @@ func main() {
 		ctx.Next()
 	})
 
-	router.POST("/register", handlers.CreateClient)
 	router.GET("/clients", middleware.AdminKeyRequired(adminKey), handlers.GetClients)
+	router.POST("/clients/new", handlers.CreateClient)
+
 	router.GET("/cars", handlers.GetCars)
-	// router.POST("/cars/:id", middleware.AdminKeyRequired(adminKey), handlers.)
-	// router.GET("/rents", middleware.AdminKeyRequired(adminKey), handlers.get)
+	router.POST("/cars/new", middleware.AdminKeyRequired(adminKey), handlers.CreateCar)
+
+	router.GET("/rents", middleware.AdminKeyRequired(adminKey), handlers.GetRents)
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalln(err)
