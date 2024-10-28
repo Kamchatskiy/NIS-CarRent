@@ -11,8 +11,8 @@ services:
     environment:
       - GIN_MODE=release
     secrets:
-      - source: db-pass
-        target: /run/secrets/db-pass
+      - db-pass
+      - admin-key
     networks:
       - main
     ports:
@@ -39,6 +39,8 @@ services:
 secrets:
   db-pass:
     file: ./secrets/db-password
+  admin-key:
+    file: ./secrets/admin-key
 
 volumes:
   db-data:
