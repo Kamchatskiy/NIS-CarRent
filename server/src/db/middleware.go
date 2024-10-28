@@ -9,8 +9,8 @@ import (
 
 func MiddleWareDB(ctx *gin.Context) *gorm.DB {
 	database, exists := ctx.Get("db")
-	if exists == false {
-		log.Fatalln("db connection error")
+	if !exists {
+		log.Fatalln("db context error")
 		return nil
 	}
 	db, _ := database.(*gorm.DB)
