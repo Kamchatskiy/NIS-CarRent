@@ -14,7 +14,7 @@ func GetClients(ctx *gin.Context) {
 	db := database.GetDBFromContext(ctx)
 
 	var clients []models.Client
-	if err := db.Find(&clients).Error; err != nil {
+	if err := db.Preload("Rents").Find(&clients).Error; err != nil {
 		log.Println(err)
 		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		ctx.Abort()
@@ -42,7 +42,6 @@ func CreateClient(ctx *gin.Context) {
 	} else if err != gorm.ErrRecordNotFound {
 		log.Println(err)
 		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
-		ctx.Abort()
 		return
 	}
 
@@ -85,4 +84,12 @@ func DeleteClient(ctx *gin.Context) {
 	}
 
 	ctx.String(http.StatusOK, http.StatusText(http.StatusOK))
+}
+
+func getClientByID(db *gorm.DB, clientID uint) (*models.Client, error) {
+	var client models.Client
+	if err := db.First(&client, clientID).Error; err != nil {
+		return nil, err
+	}
+	return &client, nil
 }

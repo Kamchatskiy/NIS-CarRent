@@ -43,12 +43,17 @@ func main() {
 	})
 
 	adminGroup := router.Group("/admin", middleware.AdminKeyRequired(adminKey))
+
 	adminGroup.GET("/clients", handlers.GetClients)
 	adminGroup.POST("/clients/new", handlers.CreateClient)
 	adminGroup.DELETE("/clients/:id", handlers.DeleteClient)
+
+	adminGroup.GET("/cars", handlers.GetCars)
 	adminGroup.POST("/cars/new", handlers.CreateCar)
 	adminGroup.DELETE("/cars/:id", handlers.DeleteCar)
+
 	adminGroup.GET("/rents", handlers.GetRents)
+	adminGroup.POST("/rents/new", handlers.CreateRent)
 	adminGroup.DELETE("/rents/:id", handlers.DeleteClient)
 
 	// router.POST("/register", handlers.Register)

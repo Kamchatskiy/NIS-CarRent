@@ -14,7 +14,7 @@ func GetCars(ctx *gin.Context) {
 	db := database.GetDBFromContext(ctx)
 
 	var cars []models.Car
-	if err := db.Find(&cars).Error; err != nil {
+	if err := db.Preload("Rents").Find(&cars).Error; err != nil {
 		log.Println(err)
 		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		ctx.Abort()
@@ -86,4 +86,12 @@ func DeleteCar(ctx *gin.Context) {
 	}
 
 	ctx.String(http.StatusOK, http.StatusText(http.StatusOK))
+}
+
+func getCarByID(db *gorm.DB, carID uint) (*models.Car, error) {
+	var car models.Car
+	if err := db.First(&car, carID).Error; err != nil {
+		return nil, err
+	}
+	return &car, nil
 }
