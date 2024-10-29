@@ -4,6 +4,9 @@ services:
   app:
     container_name: car_rent_app
     restart: no
+    depends_on:
+      db:
+        condition: service_healthy
     build:
       context: .
       dockerfile: Dockerfile
@@ -34,6 +37,11 @@ services:
       - db-data:/var/lib/postgresql/data:rw
     networks:
       - main
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "car_rent"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
 secrets:
   db-pass:
