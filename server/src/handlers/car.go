@@ -14,7 +14,7 @@ func GetCars(ctx *gin.Context) {
 	db := database.GetDBFromContext(ctx)
 
 	var cars []models.Car
-	if err := db.Find(&cars).Error; err != nil {
+	if err := db.Preload("Rents").Find(&cars).Error; err != nil {
 		log.Println(err)
 		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		ctx.Abort()
@@ -37,7 +37,7 @@ func CreateCar(ctx *gin.Context) {
 
 	var tempCar models.Car
 	if err := db.Where("model = ?", car.Model).First(&tempCar).Error; err == nil {
-		ctx.String(http.StatusConflict, "client already exists")
+		ctx.String(http.StatusConflict, http.StatusText(http.StatusConflict))
 		ctx.Abort()
 		return
 	} else if err != gorm.ErrRecordNotFound {
@@ -46,6 +46,14 @@ func CreateCar(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
+
+	if err := db.Create(&car).Error; err != nil {
+		log.Println(err)
+		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+		return
+	}
+
+	ctx.String(http.StatusCreated, http.StatusText(http.StatusCreated))
 }
 
 func DeleteCar(ctx *gin.Context) {
@@ -78,4 +86,12 @@ func DeleteCar(ctx *gin.Context) {
 	}
 
 	ctx.String(http.StatusOK, http.StatusText(http.StatusOK))
+}
+
+func getCarByID(db *gorm.DB, carID uint) (*models.Car, error) {
+	var car models.Car
+	if err := db.First(&car, carID).Error; err != nil {
+		return nil, err
+	}
+	return &car, nil
 }

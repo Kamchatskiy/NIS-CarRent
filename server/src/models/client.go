@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Client struct {
 	ID          uint      `json:"id" gorm:"primaryKey"`
@@ -9,4 +11,5 @@ type Client struct {
 	Email       string    `json:"email" binding:"required"`
 	PhoneNumber string    `json:"phone_number"`
 	CreatedAt   time.Time `json:"created_at" gorm:"autoCreateTime"`
+	Rents       []Rent    `json:"rents" gorm:"foreignKey:ClientID"`
 }

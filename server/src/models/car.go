@@ -11,4 +11,5 @@ type Car struct {
 	InsurancePrice uint      `json:"insurance_price" binding:"required"`
 	CreatedAt      time.Time `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt      time.Time `json:"updated_at" gorm:"autoUpdateTime"`
+	Rents          []Rent    `json:"rents" gorm:"foreignKey:CarID"`
 }

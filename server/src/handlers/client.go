@@ -14,7 +14,7 @@ func GetClients(ctx *gin.Context) {
 	db := database.GetDBFromContext(ctx)
 
 	var clients []models.Client
-	if err := db.Find(&clients).Error; err != nil {
+	if err := db.Preload("Rents").Find(&clients).Error; err != nil {
 		log.Println(err)
 		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		ctx.Abort()
@@ -36,13 +36,12 @@ func CreateClient(ctx *gin.Context) {
 
 	var tempClient models.Client
 	if err := db.Where("email = ?", client.Email).First(&tempClient).Error; err == nil {
-		ctx.String(http.StatusConflict, "client already exists")
+		ctx.String(http.StatusConflict, http.StatusText(http.StatusConflict))
 		ctx.Abort()
 		return
 	} else if err != gorm.ErrRecordNotFound {
 		log.Println(err)
 		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
-		ctx.Abort()
 		return
 	}
 
@@ -52,7 +51,7 @@ func CreateClient(ctx *gin.Context) {
 		return
 	}
 
-	ctx.String(http.StatusOK, http.StatusText(http.StatusOK))
+	ctx.String(http.StatusCreated, http.StatusText(http.StatusCreated))
 }
 
 func DeleteClient(ctx *gin.Context) {
@@ -85,4 +84,12 @@ func DeleteClient(ctx *gin.Context) {
 	}
 
 	ctx.String(http.StatusOK, http.StatusText(http.StatusOK))
+}
+
+func getClientByID(db *gorm.DB, clientID uint) (*models.Client, error) {
+	var client models.Client
+	if err := db.First(&client, clientID).Error; err != nil {
+		return nil, err
+	}
+	return &client, nil
 }
