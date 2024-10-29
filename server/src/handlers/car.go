@@ -37,7 +37,7 @@ func CreateCar(ctx *gin.Context) {
 
 	var tempCar models.Car
 	if err := db.Where("model = ?", car.Model).First(&tempCar).Error; err == nil {
-		ctx.String(http.StatusConflict, "client already exists")
+		ctx.String(http.StatusConflict, http.StatusText(http.StatusConflict))
 		ctx.Abort()
 		return
 	} else if err != gorm.ErrRecordNotFound {
@@ -46,6 +46,14 @@ func CreateCar(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
+
+	if err := db.Create(&car).Error; err != nil {
+		log.Println(err)
+		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+		return
+	}
+
+	ctx.String(http.StatusCreated, http.StatusText(http.StatusCreated))
 }
 
 func DeleteCar(ctx *gin.Context) {
