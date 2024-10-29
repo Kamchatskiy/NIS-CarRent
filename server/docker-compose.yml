@@ -1,4 +1,4 @@
-name: car-rent
+name: car_rent
 
 services:
   app:
