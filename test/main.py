@@ -2,7 +2,7 @@ import requests
 from faker import Faker  # type: ignore
 from random import randint
 
-url = "http://app:8080"
+url = "http://backend:8080"
 admin_key_file = open("/run/secrets/admin-key", "r")
 admin_key = admin_key_file.readline()
 fake = Faker()
