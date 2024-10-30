@@ -43,25 +43,20 @@ func main() {
 	})
 
 	adminGroup := router.Group("/admin", middleware.AdminKeyRequired(adminKey))
-
 	adminGroup.GET("/clients", handlers.GetClients)
 	adminGroup.POST("/clients/new", handlers.CreateClient)
 	adminGroup.DELETE("/clients/:id", handlers.DeleteClient)
-
 	adminGroup.GET("/cars", handlers.GetCars)
 	adminGroup.POST("/cars/new", handlers.CreateCar)
 	adminGroup.DELETE("/cars/:id", handlers.DeleteCar)
-
 	adminGroup.GET("/rents", handlers.GetRents)
 	adminGroup.POST("/rents/new", handlers.CreateRent)
 	adminGroup.DELETE("/rents/:id", handlers.DeleteClient)
 
-	// router.POST("/register", handlers.Register)
-	// router.POST("/login", handlers.Login)
-
-	// authorhizedGroup := router.Group("", middleware.JWTRequired())
-	// router.GET("/cars", handlers.GetCars)
-	// router.GET("/rents/:id", handlers.DeleteRent)
+	router.POST("/register", handlers.CreateClient)
+	router.GET("/cars", handlers.GetCars)
+	router.POST("/order", handlers.CreateRent)
+	router.GET("/orders/:id", handlers.GetRentsByEmail)
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalln(err)
