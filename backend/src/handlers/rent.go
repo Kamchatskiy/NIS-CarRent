@@ -54,9 +54,9 @@ func CreateRent(ctx *gin.Context) {
 		return
 	}
 
-	var tempRent models.Rent
+	var existingRent models.Rent
 	err = db.Where("car_id = ? AND ((start_date <= ? AND end_date >= ?) OR (start_date <= ? AND end_date >= ?))",
-		rent.CarID, rent.EndDate, rent.StartDate, rent.StartDate, rent.EndDate).First(&tempRent).Error
+		rent.CarID, rent.EndDate, rent.StartDate, rent.StartDate, rent.EndDate).First(&existingRent).Error
 	if err == nil {
 		ctx.String(http.StatusConflict, http.StatusText(http.StatusConflict))
 		return
@@ -75,7 +75,7 @@ func CreateRent(ctx *gin.Context) {
 		return
 	}
 
-	ctx.String(http.StatusCreated, http.StatusText(http.StatusCreated))
+	ctx.JSON(http.StatusCreated, gin.H{"price": rent.Price})
 }
 
 func DeleteRent(ctx *gin.Context) {
