@@ -86,9 +86,9 @@ func DeleteClient(ctx *gin.Context) {
 	ctx.String(http.StatusOK, http.StatusText(http.StatusOK))
 }
 
-func getClientByID(db *gorm.DB, clientID uint) (*models.Client, error) {
+func getClientByEmail(db *gorm.DB, email string) (*models.Client, error) {
 	var client models.Client
-	if err := db.First(&client, clientID).Error; err != nil {
+	if err := db.Preload("Rents").Where("email = ?", email).First(&client).Error; err != nil {
 		return nil, err
 	}
 	return &client, nil

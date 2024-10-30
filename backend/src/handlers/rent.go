@@ -107,3 +107,22 @@ func DeleteRent(ctx *gin.Context) {
 
 	ctx.String(http.StatusOK, http.StatusText(http.StatusOK))
 }
+
+func GetRentsByEmail(ctx *gin.Context) {
+	db := database.GetDBFromContext(ctx)
+
+	email := ctx.Query("email")
+	if email == "" {
+		ctx.String(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+		return
+	}
+
+	client, err := getClientByEmail(db, email)
+	if err != nil {
+		log.Println(err)
+		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, client)
+}

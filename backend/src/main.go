@@ -56,7 +56,7 @@ func main() {
 	router.POST("/register", handlers.CreateClient)
 	router.GET("/cars", handlers.GetCars)
 	router.POST("/order", handlers.CreateRent)
-	router.GET("/orders/:id", handlers.GetRentsByEmail)
+	router.GET("/orders", handlers.GetRentsByEmail)
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalln(err)
