@@ -13,8 +13,6 @@ services:
       context: frontend/
       dockerfile: Dockerfile.prod
       no_cache: true
-    environment:
-      - BACKEND_ADDR=http://backend:8080
     networks:
       - main
     ports:
