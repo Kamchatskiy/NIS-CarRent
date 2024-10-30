@@ -1,7 +1,13 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import SendIcon from "@mui/icons-material/Send";
-import { Button, Stack, CircularProgress, Typography } from "@mui/material";
+import {
+  Button,
+  Stack,
+  CircularProgress,
+  Typography,
+  Alert,
+} from "@mui/material";
 import { CustomTextField } from "./components/textfield";
 
 export const Register = () => {
@@ -11,6 +17,7 @@ export const Register = () => {
   const [phone_number, setPhoneNumber] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
+  const [success, setSuccess] = React.useState(null); // New state for success message
 
   const handleRegister = async () => {
     const data = {
@@ -22,9 +29,10 @@ export const Register = () => {
 
     setLoading(true);
     setError(null);
+    setSuccess(null); // Reset success message
 
     try {
-      const response = await fetch("YOUR_BACKEND_URL_HERE", {
+      const response = await fetch("http://127.0.0.1:8080/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,14 +40,15 @@ export const Register = () => {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+      if (response.ok) {
+        // If the response is successful
+        setSuccess("Registration successful!"); // Set success message
+      } else {
+        const result = await response.json();
+        setError(result.message || "An error occurred"); // Set error message
       }
-
-      // eslint-disable-next-line
-      const result = await response.json();
-    } catch (error) {
-      setError("An error occurred, please try again");
+    } catch (err) {
+      setError("An error occurred, please try again"); // Handle network errors
     } finally {
       setLoading(false);
     }
@@ -70,12 +79,26 @@ export const Register = () => {
           }}
         >
           <Typography variant="h3" color="error">
-            {error}
+            An error occurred, please try again
           </Typography>
         </Box>
       )}
 
-      {!loading && !error && (
+      {success && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: 400,
+          }}
+        >
+          <Alert severity="success">{success}</Alert>{" "}
+          {/* Display success alert */}
+        </Box>
+      )}
+
+      {!loading && !error && !success && (
         <Stack spacing={3}>
           <CustomTextField
             label="Name"
