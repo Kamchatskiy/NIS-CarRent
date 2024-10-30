@@ -49,6 +49,13 @@ export const Header = () => {
             sx={{ flex: 1 }}
           />
           <Tab
+            value="/register"
+            label="Register"
+            component={Link}
+            to="/register"
+            sx={{ flex: 1 }}
+          />
+          <Tab
             value="/cars"
             label="Cars"
             component={Link}

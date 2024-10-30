@@ -8,7 +8,8 @@ import { MyOrders } from "./pages/my-orders";
 import { Footer } from "./components/footer";
 import { ThemeProvider } from "@emotion/react";
 import { MainTheme } from "./theme";
-import "./style.css"
+import "./style.css";
+import { Register } from "./pages/register";
 
 export const App = () => {
   return (
@@ -19,6 +20,7 @@ export const App = () => {
           <Routes>
             <Route path="/" element={<Main />} />
             <Route path="/cars" element={<Cars />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/order" element={<Order />} />
             <Route path="/my-orders" element={<MyOrders />} />
           </Routes>
