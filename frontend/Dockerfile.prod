@@ -1,8 +1,15 @@
-FROM node:lts-buster
+FROM node:latest as Builder
 WORKDIR /app
 
 COPY app/. .
+RUN npm install && npm run build
 
-RUN npm install && npm install -g serve && npm run build
+FROM node:alpine
+WORKDIR /app
+
+COPY --from=Builder /app/build ./build
+
+RUN npm install -g serve
+
 EXPOSE 3000
 CMD ["npx", "serve", "-s", "build"]
