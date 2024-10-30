@@ -11,6 +11,8 @@ import {
   TextField,
   Typography,
   Paper,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
@@ -21,6 +23,7 @@ export const Order = () => {
   const [endDate, setEndDate] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [price, setPrice] = React.useState(null);
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
   const handleOrder = async () => {
     if (!email || !carId || !startDate || !endDate) {
@@ -50,11 +53,16 @@ export const Order = () => {
       const responseData = await response.json();
       console.log("Order successful:", responseData);
       setPrice(responseData.price);
+      setOpenSnackbar(true); // Open the Snackbar on success
     } catch (error) {
       console.error("Error sending order:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -136,6 +144,17 @@ export const Order = () => {
           )}
         </Paper>
       </Box>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        on
+        close={handleCloseSnackbar}
+      >
+        <Alert severity="success" sx={{ width: "100%" }}>
+          Successful
+        </Alert>
+      </Snackbar>
     </>
   );
 };
