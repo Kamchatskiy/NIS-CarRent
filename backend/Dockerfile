@@ -9,4 +9,6 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -o car-rent .
 FROM alpine:latest
 WORKDIR /app
 COPY --from=Builder /build/car-rent .
+
+EXPOSE 8080
 CMD [ "./car-rent" ]
