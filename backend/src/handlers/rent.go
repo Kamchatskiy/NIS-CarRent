@@ -26,13 +26,25 @@ func CreateRent(ctx *gin.Context) {
 	db := database.GetDBFromContext(ctx)
 
 	var rent models.Rent
-	if err := ctx.ShouldBindBodyWithJSON(&rent); err != nil {
+	if err := ctx.ShouldBindJSON(&rent); err != nil {
 		ctx.String(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
 
 	if !rent.EndDate.After(rent.StartDate) {
 		ctx.String(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+		return
+	}
+
+	var client models.Client
+	err := db.Where("email = ?", rent.ClientEmail).First(&client).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			ctx.String(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+			return
+		}
+		log.Println(err)
+		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		return
 	}
 
@@ -72,7 +84,6 @@ func DeleteRent(ctx *gin.Context) {
 	rentID := ctx.Param("id")
 	if rentID == "" {
 		ctx.String(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
-		ctx.Abort()
 		return
 	}
 
@@ -91,7 +102,6 @@ func DeleteRent(ctx *gin.Context) {
 	if err := db.Delete(&rent).Error; err != nil {
 		log.Println(err)
 		ctx.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
-		ctx.Abort()
 		return
 	}
 
