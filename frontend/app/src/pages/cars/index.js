@@ -5,6 +5,14 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 
 const columns = [
   {
+    field: "id",
+    type: "number",
+    headerName: "Car ID",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
     field: "brand",
     headerName: "Brand",
     flex: 1,
