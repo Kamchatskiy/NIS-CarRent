@@ -4,29 +4,47 @@ import Paper from "@mui/material/Paper";
 import { Box, CircularProgress, Typography } from "@mui/material";
 
 const columns = [
-  { field: "Brand", headerName: "Brand", width: 130 },
-  { field: "Model", headerName: "Model", width: 130 },
   {
-    field: "Year",
+    field: "brand",
+    headerName: "Brand",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "model",
+    headerName: "Model",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "year",
     headerName: "Year",
     type: "number",
-    width: 80,
+    flex: 0.5,
+    align: "center",
+    headerAlign: "center",
   },
   {
-    field: "Daily Rent Price",
-    headerName: "Daily Price",
+    field: "daily_price",
+    headerName: "Daily Rent Price",
     type: "number",
-    width: 100,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
   },
   {
-    field: "Insurance Price",
+    field: "insurance_price",
     headerName: "Insurance Price",
     type: "number",
-    width: 100,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
   },
 ];
 
-const paginationModel = { page: 0, pageSize: 5 };
+const paginationModel = { page: 0, pageSize: 10 };
 
 export const Cars = () => {
   const [rows, setRows] = React.useState([]);
@@ -36,9 +54,19 @@ export const Cars = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/cars");
+        const response = await fetch("http://127.0.0.1:8080/cars");
         const data = await response.json();
-        setRows(data);
+
+        const transformedData = data.map((car) => ({
+          id: car.id,
+          brand: car.brand,
+          model: car.model,
+          year: car.year,
+          daily_price: car.daily_price,
+          insurance_price: car.insurance_price,
+        }));
+
+        setRows(transformedData);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -75,7 +103,7 @@ export const Cars = () => {
         }}
       >
         <Typography variant="h2" color="error">
-          An error occured
+          An error occurred
         </Typography>
       </Box>
     );
@@ -83,14 +111,14 @@ export const Cars = () => {
 
   return (
     <Box>
-      <Paper sx={{ height: 400, width: "100%" }}>
+      <Paper variant="outlined" sx={{ height: "100%", width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
-          initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[5, 10]}
+          pageSizeOptions={[10, 50, 100]}
           checkboxSelection
-          sx={{ border: 0 }}
+          sx={{ border: 0, width: "100%" }}
+          initialState={{ pagination: { paginationModel } }}
         />
       </Paper>
     </Box>
