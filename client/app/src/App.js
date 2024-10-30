@@ -8,22 +8,22 @@ import { MyOrders } from "./pages/my-orders";
 import { Footer } from "./components/footer";
 import { ThemeProvider } from "@emotion/react";
 import { MainTheme } from "./theme";
-import { Paper } from "@mui/material";
+import "./style.css"
 
 export const App = () => {
   return (
     <>
       <ThemeProvider theme={MainTheme}>
-          <BrowserRouter>
-            <Header />
-            <Routes>
-              <Route path="/" element={<Main />} />
-              <Route path="/cars" element={<Cars />} />
-              <Route path="/order" element={<Order />} />
-              <Route path="/my-orders" element={<MyOrders />} />
-            </Routes>
-          </BrowserRouter>
-          <Footer />
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/cars" element={<Cars />} />
+            <Route path="/order" element={<Order />} />
+            <Route path="/my-orders" element={<MyOrders />} />
+          </Routes>
+        </BrowserRouter>
+        <Footer />
       </ThemeProvider>
     </>
   );
