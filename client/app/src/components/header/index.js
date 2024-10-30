@@ -25,19 +25,20 @@ export const Header = () => {
   };
 
   return (
-    <Paper variant="outlined" square={false} sx={{border: 3}}>
-      <Box
-        sx={{
-          width: "100%",
-        }}
-      >
+    <Box
+      sx={{
+        width: "100%",
+      }}
+    >
+      <Paper variant="outlined" square={false} sx={{ border: 3 }}>
         <Tabs
+          centered
           onChange={handleChangeTab}
           value={activeTab}
           textColor="primary"
           indicatorColor="primary"
           sx={{
-            width: "100%",
+            padding: 0,
           }}
         >
           <Tab
@@ -69,7 +70,7 @@ export const Header = () => {
             sx={{ flex: 1 }}
           />
         </Tabs>
-      </Box>
-    </Paper>
+      </Paper>
+    </Box>
   );
 };
