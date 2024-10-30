@@ -23,8 +23,8 @@ func ConnectDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	db.AutoMigrate(&models.Client{})
 	db.AutoMigrate(&models.Rent{})
+	db.AutoMigrate(&models.Client{})
 	db.AutoMigrate(&models.Car{})
 
 	return db, nil
