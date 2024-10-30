@@ -5,7 +5,6 @@ import { Cars } from "./pages/cars";
 import { Main } from "./pages/main";
 import { Order } from "./pages/order";
 import { MyOrders } from "./pages/my-orders";
-import { Footer } from "./components/footer";
 import { ThemeProvider } from "@emotion/react";
 import { MainTheme } from "./theme";
 import "./style.css";
@@ -25,7 +24,6 @@ export const App = () => {
             <Route path="/my-orders" element={<MyOrders />} />
           </Routes>
         </BrowserRouter>
-        <Footer />
       </ThemeProvider>
     </>
   );
