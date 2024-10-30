@@ -1,14 +1,31 @@
 name: car_rent
 
 services:
-  app:
-    container_name: car_rent_app
+  frontend:
+    container_name: car_rent_frontend
+    restart: no
+    depends_on:
+      backend:
+        condition: service_started
+    build:
+      context: frontend/
+      dockerfile: Dockerfile.prod
+      no_cache: true
+    environment:
+      - BACKEND_ADDR=http://backend:8080
+    networks:
+      - main
+    ports:
+      - 3000:3000/tcp
+
+  backend:
+    container_name: car_rent_backend
     restart: no
     depends_on:
       db:
         condition: service_healthy
     build:
-      context: .
+      context: backend/
       dockerfile: Dockerfile
       no_cache: true
     environment:
@@ -46,7 +63,7 @@ services:
     container_name: car_rent_test
     restart: no
     profiles:
-      - debug
+      - test
     depends_on:
       db:
         condition: service_healthy
