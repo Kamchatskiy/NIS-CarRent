@@ -53,7 +53,7 @@ export const Order = () => {
       const responseData = await response.json();
       console.log("Order successful:", responseData);
       setPrice(responseData.price);
-      setOpenSnackbar(true); // Open the Snackbar on success
+      setOpenSnackbar(true);
     } catch (error) {
       console.error("Error sending order:", error);
     } finally {
