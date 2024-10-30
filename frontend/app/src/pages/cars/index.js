@@ -124,7 +124,6 @@ export const Cars = () => {
           rows={rows}
           columns={columns}
           pageSizeOptions={[10, 50, 100]}
-          checkboxSelection
           sx={{ border: 0, width: "100%" }}
           initialState={{ pagination: { paginationModel } }}
         />
