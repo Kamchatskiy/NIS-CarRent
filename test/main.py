@@ -41,7 +41,7 @@ def generate_clients(size):
             },
         )
         if resp.status_code in (200, 201):
-            counts += 1
+            successful_counts += 1
     print(f"successfully added {successful_counts}/{size} clients")
 
 
