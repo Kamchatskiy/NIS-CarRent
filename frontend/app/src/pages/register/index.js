@@ -17,7 +17,7 @@ export const Register = () => {
   const [phone_number, setPhoneNumber] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
-  const [success, setSuccess] = React.useState(null); // New state for success message
+  const [success, setSuccess] = React.useState(null);
 
   const handleRegister = async () => {
     const data = {
@@ -29,7 +29,7 @@ export const Register = () => {
 
     setLoading(true);
     setError(null);
-    setSuccess(null); // Reset success message
+    setSuccess(null);
 
     try {
       const response = await fetch("http://127.0.0.1:8080/register", {
@@ -41,14 +41,13 @@ export const Register = () => {
       });
 
       if (response.ok) {
-        // If the response is successful
-        setSuccess("Registration successful!"); // Set success message
+        setSuccess("registration successful!");
       } else {
         const result = await response.json();
-        setError(result.message || "An error occurred"); // Set error message
+        setError(result.message || "an error occurred");
       }
     } catch (err) {
-      setError("An error occurred, please try again"); // Handle network errors
+      setError("An error occurred, please try again");
     } finally {
       setLoading(false);
     }
@@ -93,8 +92,7 @@ export const Register = () => {
             height: 400,
           }}
         >
-          <Alert severity="success">{success}</Alert>{" "}
-          {/* Display success alert */}
+          <Alert severity="success">{success}</Alert>
         </Box>
       )}
 
